@@ -6,7 +6,14 @@ def home(request):
     """
     渲染首页。
     """
-    return render(request, 'index.html')  # 确保 index.html 位于 templates 目录中
+    return render(request, 'index.html')
+
+def results(request):
+    """
+    渲染查询结果页面。
+    """
+    return render(request, 'results.html')
+
 
 def proxy_request(request):
     """
@@ -20,13 +27,13 @@ def proxy_request(request):
         return JsonResponse({'error': '请输入歌手名字'}, status=400)
 
     # 构造目标网站 URL
-    target_url = f'https://ych3.xmpan.top/result.php?singer={singer}'
+    target_url = f'https://nice.zcguard.com/concert-result?artist={singer}'
 
     try:
         # 发送 GET 请求到目标网站
         response = requests.get(target_url, headers={
-            'Referer': 'https://ych3.xmpan.top/',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36'
+            'Referer': 'https://nice.zcguard.com/',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0 Safari/537.36'
         })
 
         # 如果目标站点返回非 200 状态码，返回错误提示

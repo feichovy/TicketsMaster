@@ -4,27 +4,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2025 明星演唱会查询</title>
+    <title>明星演唱会查询</title>
     <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 <body>
     <div class="container">
         <!-- Header Section -->
         <div class="header">
-            <h1>明星演唱会查询</h1>
-            <h4>扫码关注我</h4>
+            <h1 class="dynamic-bg-title">2025 全国演唱会城市查询</h1>
             <img src="{% static 'contact.jpg' %}" alt="二维码" class="contact-image">
+            <p class="qr-note">扫一扫上方的二维码，加我为好友。</p>
+            <p class="promotion-text">
+                掌握最新演唱会动态，获取独家购票渠道<br>
+                支持国内外音乐节、演唱会、见面会等查询<br>
+                扫码咨询，开启你的音乐之旅！
+            </p>
         </div>
 
         <!-- Search Bar -->
-        <div class="search-bar">
-            <input type="text" id="singer" placeholder="请输入歌手名字">
-            <button onclick="searchSinger()">查询</button>
-        </div>
-
-        <!-- Results Section -->
-        <div class="results" id="results">
-            <h3>查询结果将在此显示</h3>
+        <div class="search-card">
+            <form class="search-form" onsubmit="redirectToResults(); return false;">
+                <input type="text" id="singer" class="search-input" placeholder="请输入歌手或城市名字">
+                <button type="submit" class="search-button">查询</button>
+            </form>
+            <p class="search-note">支持国内外演唱会、音乐节等查询</p>
         </div>
     </div>
 

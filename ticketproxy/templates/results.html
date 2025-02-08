@@ -1,0 +1,36 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查询结果</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <h1 class="dynamic-bg-title">查询结果</h1>
+        <img src="{% static 'contact.jpg' %}" alt="二维码" class="contact-image">
+        <p class="qr-note">扫一扫上方的二维码，加我为好友。</p>
+        <table class="result-table">
+            <thead>
+                <tr>
+                    <th>歌手</th>
+                    <th>城市</th>
+                    <th>日期</th>
+                    <th>状态</th>
+                </tr>
+            </thead>
+            <tbody id="results-body">
+                <tr>
+                    <td colspan="4">加载中，请稍候...</td>
+                </tr>
+            </tbody>
+        </table>
+        <p class="result-note">仅供参考，具体日期请以官方为准。</p>
+        <a href="/" class="search-button">返回</a>
+    </div>
+
+    <script src="{% static 'scripts.js' %}"></script>
+</body>
+</html>

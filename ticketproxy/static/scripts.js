@@ -1,13 +1,26 @@
-async function searchSinger() {
-    const singer = document.getElementById('singer').value;
-    const resultsDiv = document.getElementById('results');
+function redirectToResults() {
+    const query = document.getElementById('singer').value;
 
-    if (!singer) {
-        alert('请输入歌手名字');
+    if (!query) {
+        alert('请输入内容');
         return;
     }
 
-    resultsDiv.innerHTML = '<p>查询中...</p>';
+    // 正确跳转到 Django 的 `/results/`
+    window.location.href = `/results/?singer=${encodeURIComponent(query)}`;
+}
+
+async function fetchResults() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const singer = urlParams.get('singer');
+
+    if (!singer) {
+        alert('未提供查询参数！');
+        return;
+    }
+
+    const resultsBody = document.getElementById('results-body');
+    resultsBody.innerHTML = '<tr><td colspan="4">加载中，请稍候...</td></tr>';
 
     try {
         const response = await fetch(`/proxy/?singer=${encodeURIComponent(singer)}`);
@@ -16,33 +29,37 @@ async function searchSinger() {
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
 
-        const tables = doc.querySelectorAll('.result-table');
-        if (tables.length === 0) {
-            resultsDiv.innerHTML = `<p>未找到相关演唱会信息</p>`;
+        const rows = doc.querySelectorAll('.result-table tbody tr');
+        if (rows.length === 0) {
+            resultsBody.innerHTML = '<tr><td colspan="4">未找到相关演唱会信息</td></tr>';
             return;
         }
 
-        // 渲染每条结果为卡片
-        let htmlContent = '';
-        tables.forEach(table => {
-            const cityElement = table.querySelector('td:nth-child(1)');
-            const detailsElement = table.querySelector('td:nth-child(2)');
+        let resultsHtml = '';
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            const singerName = cells[0]?.textContent.trim() || '-';
+            const city = cells[1]?.textContent.trim() || '-';
+            const date = cells[2]?.textContent.trim() || '-';
+            const status = cells[3]?.textContent.trim() || '-';
 
-            const city = cityElement ? cityElement.textContent.trim() : '未知城市';
-            const details = detailsElement ? detailsElement.textContent.trim() : '未知信息';
-
-            htmlContent += `                
-            <div class="result-card">
-                <h4>城市: ${city}</h4>
-                <p>详情: <span>${details}</span></p>
-            </div>
-             `;
+            resultsHtml += `
+                <tr>
+                    <td>${singerName}</td>
+                    <td>${city}</td>
+                    <td>${date}</td>
+                    <td>${status}</td>
+                </tr>`;
         });
 
-
-        resultsDiv.innerHTML = htmlContent;
+        resultsBody.innerHTML = resultsHtml;
     } catch (error) {
         console.error(error);
-        resultsDiv.innerHTML = '<p>查询失败，请稍后再试</p>';
+        resultsBody.innerHTML = '<tr><td colspan="4">加载失败，请稍后重试</td></tr>';
     }
+}
+
+// 在 `results.html` 加载时自动调用
+if (window.location.pathname === "/results/") {
+    fetchResults();
 }
