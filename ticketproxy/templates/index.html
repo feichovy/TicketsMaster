@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2025 明星演唱会查询</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>明星演唱会查询</h1>
+            <h4>扫码关注我</h4>
+            <img src="{% static 'contact.jpg' %}" alt="二维码" class="contact-image">
+        </div>
+
+        <!-- Search Bar -->
+        <div class="search-bar">
+            <input type="text" id="singer" placeholder="请输入歌手名字">
+            <button onclick="searchSinger()">查询</button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="results" id="results">
+            <h3>查询结果将在此显示</h3>
+        </div>
+    </div>
+
+    <script src="{% static 'scripts.js' %}"></script>
+</body>
+</html>
