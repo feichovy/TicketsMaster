@@ -119,17 +119,20 @@ body {
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
+    font-size: 14px; /* 默认字体大小 */
 }
 
 .result-table thead {
     background: linear-gradient(45deg, #ff7b54, #ff3366, #ba2c95);
     color: white;
     font-weight: bold;
+    font-size: 14px; /* 默认字体大小 */
 }
 
 .result-table th, .result-table td {
-    padding: 12px;
+    padding: 10px;
     border: 1px solid #ddd;
+    font-size: 12px; /* 默认字体大小 */
 }
 
 .result-table tbody tr:nth-child(even) {
@@ -150,6 +153,28 @@ body {
     border-top-right-radius: 8px;
 }
 
+/* 小屏幕优化 */
+@media (max-width: 600px) {
+    .result-table th, .result-table td {
+        font-size: 10px; /* 手机端字体进一步缩小 */
+        padding: 8px; /* 调整单元格间距 */
+    }
+
+    .dynamic-bg-title {
+        font-size: 20px; /* 标题适配移动端 */
+        padding: 12px;
+    }
+
+    .search-input {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .search-button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
 /* 提示文字 */
 .result-note {
     text-align: center;
