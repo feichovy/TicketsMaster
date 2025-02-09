@@ -2,11 +2,16 @@ import requests
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 
+
 def home(request):
-    """
-    渲染首页。
-    """
-    return render(request, 'index.html')
+    qr_type = request.GET.get('qr', 'default')  # 获取 URL 参数，例如 `/` 或 `/?qr=2`
+
+    if qr_type == '2':
+        qr_image = "static/contact1.jpg"  # 第二个二维码
+    else:
+        qr_image = "static/contact2.jpg"  # 默认二维码
+
+    return render(request, "index.html", {"qr_image": qr_image})
 
 def results(request):
     """
