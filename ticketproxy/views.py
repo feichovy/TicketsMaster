@@ -1,6 +1,7 @@
 import requests
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.views.decorators.csrf import csrf_exempt
 
 
 def home(request):
@@ -18,37 +19,28 @@ def results(request):
     渲染查询结果页面。
     """
     return render(request, 'results.html')
-
-
+@csrf_exempt
 def proxy_request(request):
-    """
-    代理查询功能，将查询请求转发到目标网站，并返回结果。
-    """
-    # 获取前端传递的参数
-    singer = request.GET.get('singer', '')
+    if request.method != 'POST':
+        return JsonResponse({'error': '仅支持 POST 请求'}, status=405)
 
-    # 如果未输入歌手名字，返回错误提示
+    singer = request.POST.get('singer', '').strip()
     if not singer:
         return JsonResponse({'error': '请输入歌手名字'}, status=400)
 
-    # 构造目标网站 URL
-    target_url = f'https://nice.zcguard.com/concert-result?artist={singer}'
+    target_url = 'http://49.235.183.148/tmp10/search.php'
 
     try:
-        # 发送 GET 请求到目标网站
-        response = requests.get(target_url, headers={
-            'Referer': 'https://nice.zcguard.com/',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0 Safari/537.36'
+        response = requests.post(target_url, data={'geshou': singer}, headers={
+            'Referer': 'http://49.235.183.148/tmp10/',
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36 Edg/133.0.0.0',
+            'Content-Type': 'application/x-www-form-urlencoded'
         })
 
-        # 如果目标站点返回非 200 状态码，返回错误提示
         if response.status_code != 200:
             return JsonResponse({'error': '目标站点未返回有效数据'}, status=response.status_code)
 
-        # 返回目标站点的 HTML 内容
         return HttpResponse(response.content, content_type='text/html')
 
     except requests.exceptions.RequestException as e:
-        # 捕获异常并返回错误信息
-        print(f"Error occurred: {e}")
         return JsonResponse({'error': '查询失败，请稍后再试'}, status=500)
